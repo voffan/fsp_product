@@ -38,16 +38,13 @@ class GetUserData(APIView):
 
     def post(self, request):
         token_key = request.headers.get('Authorization', '').split()[-1]
-        try:
-            token = Token.objects.get(key=token_key)
-            user = token.user
-            user_data = {
-                'username': user.username,
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'is_active': user.is_active,
-            }
-            return Response(user_data)
-        except Token.DoesNotExist:
-            return Response({'error': 'Неправильный токен'}, status=400)
+        token = Token.objects.get(key=token_key)
+        user = token.user
+        user_data = {
+            'username': user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'is_active': user.is_active,
+        }
+        return Response(user_data)
