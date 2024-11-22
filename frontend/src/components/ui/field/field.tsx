@@ -29,23 +29,23 @@ const Field = forwardRef<
           </label>
         )}
 
-        <input
-          ref={ref}
-          type={type}
-          disabled={disabled}
-          className={cn(
-            "w-full py-6 px-4 border-[1px] border-black text-xl placeholder:text-xl placeholder:text-gray rounded-xl outline-none",
-            className
-          )}
-          placeholder={placeholder}
-          {...rest}
-        />
+        <div className="w-full">
+          <input
+            ref={ref}
+            type={type}
+            disabled={disabled}
+            className={cn(
+              "w-full py-3 px-4 border-[1px] border-black text-xl placeholder:text-xl placeholder:text-gray rounded-xl outline-none",
+              className
+            )}
+            placeholder={placeholder}
+            {...rest}
+          />
 
-        {error && !disabled && (
-          <div className="pt-2" color="red">
-            {error}
-          </div>
-        )}
+          {error && !disabled && (
+            <div className="pt-1 text-red-500">{error}</div>
+          )}
+        </div>
       </div>
     )
   }

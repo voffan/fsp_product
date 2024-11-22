@@ -7,15 +7,15 @@ import Footer from "../components/ui/footer/footer"
 const MainLayout = () => {
   return (
     <div className="font-inter">
-      <Container>
+      <Container className="shadow-md">
         <Header />
       </Container>
 
-      <Container className="h-[calc()]">
+      <Container className="h-[calc(100vh-64px-220px)]">
         <Outlet />
       </Container>
 
-      <Container>
+      <Container className="bg-lightgray">
         <Footer />
       </Container>
     </div>

@@ -1,7 +1,12 @@
 import { create } from "zustand"
 import { IUser } from "../interfaces/user"
 import { AuthService } from "../services/auth/auth.service"
-import { removeFromStorage, setToken } from "../services/auth/auth.helper"
+import {
+  getToken,
+  removeFromStorage,
+  setToken,
+} from "../services/auth/auth.helper"
+import { IEmailPassword, IRegistartionData } from "../interfaces/auth"
 
 interface IUserStore {
   isLoading: boolean
@@ -10,8 +15,8 @@ interface IUserStore {
   isError: boolean
   error: string | null
   check: () => void
-  login: () => void
-  register: () => void
+  login: (data: IEmailPassword) => void
+  register: (data: IRegistartionData) => void
   logout: () => void
 }
 
@@ -29,7 +34,13 @@ export const useUserStore = create<IUserStore>((set) => ({
       error: null,
     })
 
-    const isLogged = await AuthService.check()
+    const token = getToken()
+
+    let isLogged = false
+
+    if (token) {
+      isLogged = await AuthService.check()
+    }
 
     if (!isLogged) {
       removeFromStorage()
@@ -47,10 +58,60 @@ export const useUserStore = create<IUserStore>((set) => ({
         error: null,
       })
   },
-  login: async () => {
-    
+  login: async (data: IEmailPassword) => {
+    set({
+      isLoading: true,
+      isAuth: false,
+      isError: false,
+      error: null,
+    })
+
+    const response = await AuthService.login(data)
+
+    if (response.token) {
+      setToken(response.token)
+      set({
+        isLoading: false,
+        isAuth: true,
+        isError: false,
+        error: null,
+      })
+    } else {
+      set({
+        isLoading: false,
+        isAuth: false,
+        isError: true,
+        error: "Ошибка",
+      })
+    }
   },
-  register: async () => {},
+  register: async (data: IRegistartionData) => {
+    set({
+      isLoading: true,
+      isAuth: false,
+      isError: false,
+      error: null,
+    })
+
+    const response = await AuthService.register(data)
+
+    if (response.token) {
+      setToken(response.token)
+      set({
+        isLoading: false,
+        isAuth: true,
+        isError: false,
+        error: null,
+      })
+    } else {
+      set({
+        isLoading: false,
+        isAuth: false,
+        isError: true,
+        error: "Ошибка",
+      })
+    }
+  },
   logout: async () => {
     set({
       isLoading: true,
