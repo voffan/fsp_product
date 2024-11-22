@@ -1,0 +1,2 @@
+IMPORT_PATH = '../import'
+IMPORT_FILENAME = 'II_chast_EKP_2024_14_11_24_65c6deea36.pdf'
