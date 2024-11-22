@@ -10,7 +10,7 @@ from .serializers import UserSerializer
 # Create your views here.
 
 class UserViewSet(ModelViewSet):
-    permission_classes = [IsAdminUser]
+    #permission_classes = [IsAdminUser]
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
