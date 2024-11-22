@@ -44,6 +44,6 @@ class GetToken(APIView):
             if user.check_password(password):
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({'token': token.key})
-            return Response({'error': 'Invalid credentials'}, status=HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Учетной записи с таким логином не существует или пароль был введен не верно'}, status=HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
-            return Response({'error': 'User not found'}, status=HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Пользователь не найден'}, status=HTTP_400_BAD_REQUEST)
