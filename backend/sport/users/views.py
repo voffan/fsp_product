@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
-from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 # Create your views here.
 
@@ -33,17 +32,21 @@ class CheckToken(APIView):
         return Response({'detail': result})
 
 
-class GetToken(APIView):
+class GetUserData(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
+        token_key = request.headers.get('Authorization', '').split()[-1]
         try:
-            user = User.objects.get(username=username)
-            if user.check_password(password):
-                token, created = Token.objects.get_or_create(user=user)
-                return Response({'token': token.key})
-            return Response({'error': 'Учетной записи с таким логином не существует или пароль был введен не верно'}, status=HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({'error': 'Пользователь не найден'}, status=HTTP_400_BAD_REQUEST)
+            token = Token.objects.get(key=token_key)
+            user = token.user
+            user_data = {
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'is_active': user.is_active,
+            }
+            return Response(user_data)
+        except Token.DoesNotExist:
+            return Response({'error': 'Неправильный токен'}, status=400)
