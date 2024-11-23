@@ -29,27 +29,19 @@ class ContestType(models.Model):
         return self.name
 
 
+class Gender(models.IntegerChoices):
+    FEMALE = 0, "Женщина"
+    MALE = 1, "Мужчина"
+
+
 class AgeGroup(models.Model):
+    contest = models.ForeignKey('Contest', verbose_name="Cоревнование", db_index=True, null=False, on_delete=models.CASCADE)
+    gender = models.IntegerField('Пол', default=Gender.MALE, choices=Gender.choices)
     start = models.IntegerField(verbose_name="Нижний порог")
     end = models.IntegerField(verbose_name="Верхний порог")
 
     def __str__(self):
-        return str(self.start) + '-' + str(self.end)
-
-
-class GenderGroup(models.Model):
-    name = models.CharField(verbose_name="Наименование", max_length=250)
-
-    def __str__(self):
-        return self.name
-
-
-class Category(models.Model):
-    gender = models.ForeignKey(GenderGroup, verbose_name="Гендерная категория", db_index=True, null=False, on_delete=models.CASCADE)
-    age = models.ForeignKey(AgeGroup, verbose_name="Возрастная категория", db_index=True, null=False, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.gender.name + ' ' + str(self.age)
+        return self.contest.program + ' ' + ("Мужчина" if self.gender == 1 else "Женщина") + ' ' + str(self.start) + '-' + str(self.end)
 
 
 class Contest(models.Model):
@@ -61,6 +53,8 @@ class Contest(models.Model):
     country = models.ForeignKey(Country, verbose_name="Страна проведения", db_index=True, null=True, on_delete=models.SET_NULL)
     contestants = models.IntegerField(verbose_name="Количество участников")
     contest_type = models.ForeignKey(ContestType, verbose_name="Уровень соревнования", db_index=True, null=True, on_delete=models.SET_NULL)
+    male = models.BooleanField("Мужчины")
+    female = models.BooleanField("Женщины")
 
     def save(self, *args, **kwargs):
         if self.pk is not None:
@@ -71,13 +65,6 @@ class Contest(models.Model):
     def __str__(self):
         return self.program
 
-
-class ContestCategory(models.Model):
-    contest = models.ForeignKey(Contest, verbose_name="Cоревнование", db_index=True, null=True, on_delete=models.SET_NULL)
-    category = models.ForeignKey(Category, verbose_name="Категория", db_index=True, null=True, on_delete=models.SET_NULL)
-    
-    def __str__(self):
-        return str(self.contest) + ' ' + str(self.category)
 
 class ContestDiscipline(models.Model):
     contest = models.ForeignKey(Contest, verbose_name="Cоревнование", db_index=True, null=True, on_delete=models.SET_NULL)
