@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
-from rest_framework.status import HTTP_201_CREATED
+from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_400_BAD_REQUEST
 
 # Create your views here.
 
@@ -22,6 +22,23 @@ class UserViewSet(ModelViewSet):
         user = serializer.save()
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key}, status=HTTP_201_CREATED)
+
+
+class UserProfile(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+    def post(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 class CheckToken(APIView):
@@ -48,3 +65,4 @@ class GetUserData(APIView):
             'is_active': user.is_active,
         }
         return Response(user_data)
+    
