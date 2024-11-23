@@ -22,4 +22,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('userapi/', include('users.urls')),
     path('countryapi/', include('country.urls')),
+    path('contestapi/', include('contests.urls')),
 ]

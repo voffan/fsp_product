@@ -56,7 +56,7 @@ class Contest(models.Model):
     end = models.DateField(verbose_name="Дата окончания")
     place = models.ForeignKey(City, verbose_name="Город проведения", db_index=True, null=True, on_delete=models.SET_NULL)
     country = models.ForeignKey(Country, verbose_name="Страна проведения", db_index=True, null=True, on_delete=models.SET_NULL)
-    contestants = models.IntegerField(verbose_name="Верхний порог")
+    contestants = models.IntegerField(verbose_name="Количество участников")
     contest_type = models.ForeignKey(ContestType, verbose_name="Уровень соревнования", db_index=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
@@ -64,7 +64,7 @@ class Contest(models.Model):
 
 
 class ContestCategory(models.Model):
-    contest = models.ForeignKey(ContestType, verbose_name="Cоревнование", db_index=True, null=True, on_delete=models.SET_NULL)
+    contest = models.ForeignKey(Contest, verbose_name="Cоревнование", db_index=True, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(Category, verbose_name="Категория", db_index=True, null=True, on_delete=models.SET_NULL)
     
     def __str__(self):
