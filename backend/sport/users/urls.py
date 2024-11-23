@@ -12,4 +12,5 @@ urlpatterns = [
     path('profile/', UserProfile.as_view()),
     path('filters/', UserFiltersView.as_view({'get': 'list'})),
     path('filters/create/', UserFiltersView.as_view({'post': 'create'})),
+    path('filters/delete/<int:filter_id>/', UserFiltersView.as_view({'delete': 'delete'})),
 ]

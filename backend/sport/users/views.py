@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .serializers import UserSerializer, UserFiltersSerializer
 from .models import UserFilters
-from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 
 # Create your views here.
 
@@ -80,3 +80,13 @@ class UserFiltersView(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         filter = serializer.save(user=request.user)
         return Response({'result': True}, status=HTTP_201_CREATED)
+    
+    def delete(self, request, filter_id):
+        try:
+            filter = UserFilters.objects.get(id=filter_id, user=request.user)
+            filter.delete()
+            return Response({"result":True}, status=HTTP_204_NO_CONTENT)
+        except UserFilters.DoesNotExist:
+            return Response({"result":False, "errors":"Фильтр не найден"},status=HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"errors": str(e)}, status=HTTP_500_INTERNAL_SERVER_ERROR)
