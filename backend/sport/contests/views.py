@@ -1,8 +1,10 @@
+import datetime
 from django.shortcuts import render
 from .models import SportType, Discipline, ContestType, AgeGroup, GenderGroup, Category, Contest, ContestCategory
 from .serializers import SportTypeSerializer, DisciplineSerializer, ContestTypeSerializer, AgeGroupSerializer, GenderGroupSerializer, CategorySerializer, ContestSerializer, ContestCategorySerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 
 # Create your views here.
@@ -12,6 +14,7 @@ class SportTypeView(ModelViewSet):
 
     queryset = SportType.objects.all()
     serializer_class = SportTypeSerializer
+    
 
 class DisciplineView(ModelViewSet):
     #permission_classes = [IsAuthenticated]
@@ -48,6 +51,19 @@ class ContestView(ModelViewSet):
 
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
+
+    def get_filter_data(self, request):
+        try:
+            start = datetime.datetime.strptime(request.GET['start'], '%d%m%Y').date() if 'start' in request.GET else datetime.date(1900, 1, 1)
+            if 'end' not in request.GET:
+                return Response({'error': 'Дата конца периода не задана'}, status=404)
+            end = datetime.datetime.strptime(request.GET['end'], '%d%m%Y').date()
+        except:
+            return Response({'error': 'Формат даты задан неверно!'}, status=404)
+        contests = Contest.objects.filter(start__gte=start, end__lt=end)
+        ser = ContestSerializer(contests, many=True)
+        return Response(ser.data, status=200)
+
 
 class ContestCategoryView(ModelViewSet):
     #permission_classes = [IsAuthenticated]
