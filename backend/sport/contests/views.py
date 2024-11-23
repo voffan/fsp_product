@@ -55,7 +55,7 @@ class ContestView(ModelViewSet):
             amount = int(request.GET['per_page'])
 
         pages = Paginator(self.queryset, amount)
-
+        page = 1
         if 'page' in request.GET:
             page = int(request.GET['page'])
             if page > pages.num_pages:
@@ -108,7 +108,7 @@ class ContestView(ModelViewSet):
             amount = int(request.GET['per_page'])
 
         pages = Paginator(self.queryset, amount)
-
+        page = 1
         if 'page' in request.GET:
             page = int(request.GET['page'])
             if page > pages.num_pages:
