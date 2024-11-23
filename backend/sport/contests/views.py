@@ -1,7 +1,7 @@
 import datetime
 from django.shortcuts import render
-from .models import SportType, Discipline, ContestType, AgeGroup, GenderGroup, Category, Contest, ContestCategory
-from .serializers import SportTypeSerializer, DisciplineSerializer, ContestTypeSerializer, AgeGroupSerializer, GenderGroupSerializer, CategorySerializer, ContestSerializer, ContestCategorySerializer
+from .models import SportType, Discipline, ContestType, AgeGroup, Contest
+from .serializers import SportTypeSerializer, DisciplineSerializer, ContestTypeSerializer, AgeGroupSerializer, ContestSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -40,17 +40,6 @@ class AgeGroupView(ModelViewSet):
     queryset = AgeGroup.objects.all()
     serializer_class = AgeGroupSerializer
 
-class GenderGroupView(ModelViewSet):
-    #permission_classes = [IsAuthenticated]
-
-    queryset = GenderGroup.objects.all()
-    serializer_class = GenderGroupSerializer
-
-class CategoryView(ModelViewSet):
-    #permission_classes = [IsAuthenticated]
-
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
 
 class ContestView(ModelViewSet):
     #permission_classes = [IsAuthenticated]
@@ -66,10 +55,14 @@ class ContestView(ModelViewSet):
             self.queryset = self.queryset.filter(contestdiscipline__discipline__id__in=request.GET.getlist('discipline')).distinct()
         if 'contesttype' in request.GET:
             self.queryset = self.queryset.filter(contest_type__id__in=request.GET.getlist('contesttype'))
+        if 'male' in request.GET:
+            self.queryset = self.queryset.filter(male=True).distinct()
+        if 'female' in request.GET:
+            self.queryset = self.queryset.filter(female=True).distinct()
         if 'agestart' in request.GET:
-            self.queryset = self.queryset.filter(contestcategory__category__age__start__gte=request.GET['agestart']).distinct()
+            self.queryset = self.queryset.filter(agegroup__start__gte=request.GET['agestart']).distinct()
         if 'ageend' in request.GET:
-            self.queryset = self.queryset.filter(contestcategory__category__age__end__lte=request.GET['ageend']).distinct()
+            self.queryset = self.queryset.filter(agegroup__end__lte=request.GET['ageend']).distinct()
         # if 'gendergroup' in request.GET:
         #     self.queryset = self.queryset.filter(contestcategory__category__age__end__lte=request.GET['ageend']).distinct()
         if 'mincontestant' in request.GET:
@@ -91,10 +84,3 @@ class ContestView(ModelViewSet):
         
         ser = ContestSerializer(self.queryset, many=True)
         return Response(ser.data, status=200)
-
-
-class ContestCategoryView(ModelViewSet):
-    #permission_classes = [IsAuthenticated]
-
-    queryset = ContestCategory.objects.all()
-    serializer_class = ContestCategorySerializer
