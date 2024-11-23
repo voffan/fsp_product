@@ -1,5 +1,8 @@
 from django.db import models
 from country.models import City, Country
+#from notifications.models import Notification
+#from subscription.models import Subscrip
+from notifications.NotificationsFuncs import sendNotification
 
 # Create your models here.
 
@@ -58,6 +61,12 @@ class Contest(models.Model):
     country = models.ForeignKey(Country, verbose_name="Страна проведения", db_index=True, null=True, on_delete=models.SET_NULL)
     contestants = models.IntegerField(verbose_name="Количество участников")
     contest_type = models.ForeignKey(ContestType, verbose_name="Уровень соревнования", db_index=True, null=True, on_delete=models.SET_NULL)
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            # Создание нового объекта
+            sendNotification(self)
+        super(Contest, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.program
