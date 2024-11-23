@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import UserViewSet, CheckToken, GetUserData, UserProfile
+from .views import UserViewSet, CheckToken, GetUserData, UserProfile, UserFiltersView
 from rest_framework.authtoken import views
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('check-token/', CheckToken.as_view()),
     path('get-user/', GetUserData.as_view()),
     path('profile/', UserProfile.as_view()),
+    path('filters/', UserFiltersView.as_view({'get': 'list'})),
 ]

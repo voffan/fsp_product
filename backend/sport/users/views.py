@@ -5,7 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserFiltersSerializer
+from .models import UserFilters
 from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_400_BAD_REQUEST
 
 # Create your views here.
@@ -61,4 +62,15 @@ class GetUserData(APIView):
             'is_active': user.is_active,
         }
         return Response(user_data)
-    
+
+
+class UserFiltersView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    queryset = UserFilters.objects.all()
+    serializer_class = UserFiltersSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = UserFilters.objects.filter(user__id=request.user.id)
+        ser = self.get_serializer(queryset, many=True)
+        return Response(ser.data, status=200)
