@@ -5,13 +5,13 @@ from .models import Country, District, Region, City
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class DistrictSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class RegionSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class RegionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Region
-        fields = ['district_id','district', 'name']
+        fields = ['id', 'district_id','district', 'name']
 
 
 class CitySerializer(serializers.ModelSerializer):
@@ -29,4 +29,4 @@ class CitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = City
-        fields = ['region_id', 'region', 'name']
+        fields = ['id', 'region_id', 'region', 'name']
