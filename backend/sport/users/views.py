@@ -52,7 +52,7 @@ class CheckToken(APIView):
 class GetUserData(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request):
+    def get(self, request):
         user = Token.objects.get(key=request.headers.get('Authorization', '').split()[-1]).user
         user_data = {
             'username': user.username,
