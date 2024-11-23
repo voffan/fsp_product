@@ -11,4 +11,5 @@ urlpatterns = [
     path('get-user/', GetUserData.as_view()),
     path('profile/', UserProfile.as_view()),
     path('filters/', UserFiltersView.as_view({'get': 'list'})),
+    path('filters/create/', UserFiltersView.as_view({'post': 'create'})),
 ]

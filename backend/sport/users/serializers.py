@@ -25,4 +25,4 @@ class UserSerializer(serializers.ModelSerializer):
 class UserFiltersSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserFilters
-        fields = ['id', 'user', 'sport_type', 'discipline', 'program', 'place', 'contestants_min', 'contestants_max', 'gender', 'age', 'start_date', 'end_date', 'contest_type']
+        fields = ['id', 'user', 'filter_str']

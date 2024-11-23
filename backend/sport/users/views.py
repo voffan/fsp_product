@@ -74,3 +74,9 @@ class UserFiltersView(ModelViewSet):
         queryset = UserFilters.objects.filter(user__id=request.user.id)
         ser = self.get_serializer(queryset, many=True)
         return Response(ser.data, status=200)
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        filter = serializer.save(user=request.user)
+        return Response({'result': True}, status=HTTP_201_CREATED)
