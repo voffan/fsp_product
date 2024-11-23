@@ -23,4 +23,5 @@ urlpatterns = [
     path('userapi/', include('users.urls')),
     path('countryapi/', include('country.urls')),
     path('contestapi/', include('contests.urls')),
+    path('subscriptionapi/', include('subscription.urls')),
 ]
