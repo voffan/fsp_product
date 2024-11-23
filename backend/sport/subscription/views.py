@@ -40,7 +40,7 @@ class SubscriptionView(ModelViewSet):
             if 'subscribe' in request.data:
                 try:
                     for contest in Contest.objects.filter(id__in=request.data['subscribe']):
-                        Subscription.objects.create(user=request.user, contest=contest)
+                        Subscription.objects.update_or_create(user=request.user, contest=contest)
                     result['result'] = True
                 except:
                     result['error'] = 'Список идентификаторов неправильно задан!'

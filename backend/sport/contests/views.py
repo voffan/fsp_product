@@ -50,7 +50,8 @@ class ContestView(ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        amount = 50
+        amount = 15
+        print(request.GET)
         if 'per_page' in request.GET:
             amount = int(request.GET['per_page'])
 
@@ -103,7 +104,7 @@ class ContestView(ModelViewSet):
             except:
                 return Response({'error': 'Формат даты конца периода задан неверно!'}, status=404)
         
-        amount = 50
+        amount = 15
         if 'per_page' in request.GET:
             amount = int(request.GET['per_page'])
 
