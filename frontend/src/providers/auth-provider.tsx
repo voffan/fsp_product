@@ -23,19 +23,19 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth()
   }, [check])
 
-  useEffect(() => {
-    if (!isLoading) {
-      if (isAuth) {
-        if (pathname === "/auth") {
-          navigate("/")
-        }
-      } else {
-        if (pathname !== "/auth") {
-          navigate("/auth")
-        }
-      }
-    }
-  }, [isAuth, isLoading, pathname, navigate])
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     if (isAuth) {
+  //       if (pathname === "/auth") {
+  //         navigate("/")
+  //       }
+  //     } else {
+  //       if (pathname !== "/auth") {
+  //         navigate("/auth")
+  //       }
+  //     }
+  //   }
+  // }, [isAuth, isLoading, pathname, navigate])
 
   if (isLoading) return <LoaderScreen />
 
