@@ -22,7 +22,7 @@ class SubscriptionView(ModelViewSet):
     
     def delete(self, request, subscription_id):
         try:
-            notification = Subscription.objects.get(id=subscription_id, user=request.user)
+            notification = Subscription.objects.get(contest__id=subscription_id, user=request.user)
             notification.delete()
             return Response({"result":True}, status=HTTP_204_NO_CONTENT)
         except Subscription.DoesNotExist:

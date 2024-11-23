@@ -23,7 +23,7 @@ const Field = forwardRef<
       <div
         className={cn("w-full flex flex-col justify-center items-start gap-3")}
       >
-        {!disabled && (
+        {!disabled && label && (
           <label>
             <div className="text-xl">{label}</div>
           </label>
@@ -35,7 +35,8 @@ const Field = forwardRef<
             type={type}
             disabled={disabled}
             className={cn(
-              "w-full py-3 px-4 border-[1px] border-black text-xl placeholder:text-xl placeholder:text-gray rounded-xl outline-none",
+              className ? "" : "text-xl placeholder:text-xl py-3 px-4 ",
+              "w-full border-[1px] border-black placeholder:text-gray rounded-xl outline-none",
               className
             )}
             placeholder={placeholder}

@@ -7,13 +7,17 @@ import {
   setToken,
 } from "../services/auth/auth.helper"
 import { IEmailPassword, IRegistartionData } from "../interfaces/auth"
+import { UserService } from "../services/user/user.service"
 
 interface IUserStore {
   isLoading: boolean
+  isLogin: boolean
   isAuth: boolean
   user: IUser | null
   isError: boolean
   error: string | null
+  setIsLogin: (data: boolean) => void
+  setUser: (data: IUser) => void
   check: () => void
   login: (data: IEmailPassword) => void
   register: (data: IRegistartionData) => void
@@ -21,11 +25,22 @@ interface IUserStore {
 }
 
 export const useUserStore = create<IUserStore>((set) => ({
-  isLoading: false,
+  isLoading: true,
+  isLogin: true,
   isAuth: false,
   user: null,
   isError: false,
   error: null,
+  setIsLogin: (data: boolean) => {
+    set({
+      isLogin: data,
+    })
+  },
+  setUser: (data: IUser) => {
+    set({
+      user: data,
+    })
+  },
   check: async () => {
     set({
       isLoading: false,
@@ -49,14 +64,21 @@ export const useUserStore = create<IUserStore>((set) => ({
         isAuth: false,
         isError: false,
         error: null,
+        user: null,
       })
-    } else
+    } else {
+      const user = await UserService.getProfile()
+
+      console.log("set user", user)
+
       set({
         isLoading: false,
         isAuth: true,
         isError: false,
         error: null,
+        user,
       })
+    }
   },
   login: async (data: IEmailPassword) => {
     set({
@@ -66,9 +88,8 @@ export const useUserStore = create<IUserStore>((set) => ({
       error: null,
     })
 
-    const response = await AuthService.login(data)
-
-    if (response.token) {
+    try {
+      const response = await AuthService.login(data)
       setToken(response.token)
       set({
         isLoading: false,
@@ -76,12 +97,12 @@ export const useUserStore = create<IUserStore>((set) => ({
         isError: false,
         error: null,
       })
-    } else {
+    } catch (error: any) {
       set({
         isLoading: false,
         isAuth: false,
         isError: true,
-        error: "Ошибка",
+        error: error.response.data.errors[0],
       })
     }
   },
@@ -93,9 +114,8 @@ export const useUserStore = create<IUserStore>((set) => ({
       error: null,
     })
 
-    const response = await AuthService.register(data)
-
-    if (response.token) {
+    try {
+      const response = await AuthService.register(data)
       setToken(response.token)
       set({
         isLoading: false,
@@ -103,12 +123,12 @@ export const useUserStore = create<IUserStore>((set) => ({
         isError: false,
         error: null,
       })
-    } else {
+    } catch (error: any) {
       set({
         isLoading: false,
         isAuth: false,
         isError: true,
-        error: "Ошибка",
+        error: error.response.data.errors[0],
       })
     }
   },

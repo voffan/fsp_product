@@ -30,7 +30,13 @@ export const AuthService = {
     const response = await instance({
       url: "/userapi/users/create/",
       method: "POST",
-      data,
+      data: {
+        username: data.username,
+        password: data.password,
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+      },
     })
 
     return response.data
