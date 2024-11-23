@@ -24,4 +24,5 @@ urlpatterns = [
     path('countryapi/', include('country.urls')),
     path('contestapi/', include('contests.urls')),
     path('notificationapi/', include('notifications.urls')),
+    path('subscriptionapi/', include('subscription.urls')),
 ]
