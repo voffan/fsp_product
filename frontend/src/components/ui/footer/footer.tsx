@@ -7,10 +7,10 @@ import Logo from "../logo/logo"
 
 const Footer = () => {
   return (
-    <div className="w-full h-[220px] flex flex-col">
-      <div className="w-full flex flex-col gap-5 border-b-[1px] border-smoke pt-8 px-8">
+    <div className="w-full mx-auto h-[220px] flex flex-col px-8">
+      <div className="w-full flex flex-col gap-5 border-b-[1px] border-smoke pt-8">
         {/* Логотип и контакты с адресом */}
-        <div className="w-full flex flex-row justify-around items-center">
+        <div className="w-full flex flex-row justify-between items-center">
           <Logo />
 
           <div className="">Министерство спорта России</div>

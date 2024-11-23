@@ -21,14 +21,14 @@ interface IUserStore {
 }
 
 export const useUserStore = create<IUserStore>((set) => ({
-  isLoading: true,
+  isLoading: false,
   isAuth: false,
   user: null,
   isError: false,
   error: null,
   check: async () => {
     set({
-      isLoading: true,
+      isLoading: false,
       isAuth: false,
       isError: false,
       error: null,

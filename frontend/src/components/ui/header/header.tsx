@@ -11,7 +11,7 @@ const Header = () => {
   const { logout } = useUserStore()
 
   return (
-    <header className="w-full xl:w-[1366px] mx-auto h-16 flex flex-row justify-between items-center px-4 xl:px-0">
+    <header className="w-full px-8 h-16 flex flex-row justify-between items-center">
       {/* Логотип */}
       <div className="w-14 h-14">
         <Logo />

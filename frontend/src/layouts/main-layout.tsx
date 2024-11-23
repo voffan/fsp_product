@@ -11,7 +11,7 @@ const MainLayout = () => {
         <Header />
       </Container>
 
-      <Container className="h-[calc(100vh-64px-220px)]">
+      <Container className="h-[calc(100vh-64px-220px)] px-8">
         <Outlet />
       </Container>
 
