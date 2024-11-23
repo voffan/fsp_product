@@ -51,7 +51,7 @@ class Category(models.Model):
 
 class Contest(models.Model):
     program = models.CharField(verbose_name="Программа", max_length=250)
-    code = models.CharField(verbose_name="Rод", max_length=250)
+    code = models.CharField(verbose_name="Код", max_length=250)
     start = models.DateField(verbose_name="Дата начала")
     end = models.DateField(verbose_name="Дата окончания")
     place = models.ForeignKey(City, verbose_name="Город проведения", db_index=True, null=True, on_delete=models.SET_NULL)
@@ -69,3 +69,11 @@ class ContestCategory(models.Model):
     
     def __str__(self):
         return str(self.contest) + ' ' + str(self.category)
+
+class ContestDiscipline(models.Model):
+    contest = models.ForeignKey(Contest, verbose_name="Cоревнование", db_index=True, null=True, on_delete=models.SET_NULL)
+    discipline = models.ForeignKey(Discipline, verbose_name="Дисциплина", db_index=True, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f'{self.contest} {self.discipline}'
+

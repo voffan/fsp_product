@@ -58,15 +58,33 @@ class ContestView(ModelViewSet):
     serializer_class = ContestSerializer
 
     def get_filter_data(self, request):
-        try:
-            start = datetime.datetime.strptime(request.GET['start'], '%d%m%Y').date() if 'start' in request.GET else datetime.date(1900, 1, 1)
-            if 'end' not in request.GET:
-                return Response({'error': 'Дата конца периода не задана'}, status=404)
-            end = datetime.datetime.strptime(request.GET['end'], '%d%m%Y').date()
-        except:
-            return Response({'error': 'Формат даты задан неверно!'}, status=404)
-        contests = Contest.objects.filter(start__gte=start, end__lt=end)
-        ser = ContestSerializer(contests, many=True)
+
+        if 'sporttype' in request.GET:
+            self.queryset = self.queryset.filter(contestdiscipline__discipline__sport_type__id=request.GET['sporttype']).distinct()
+        if 'discipline' in request.GET:
+            self.queryset = self.queryset.filter(contestdiscipline__discipline__id=request.GET['discipline']).distinct()
+        if 'contesttype' in request.GET:
+            self.queryset = self.queryset.filter(contest_type__id=request.GET['contesttype'])
+        if 'agestart' in request.GET:
+            self.queryset = self.queryset.filter(contestcategory__category__age__start__gte=request.GET['agestart']).distinct()
+        if 'ageend' in request.GET:
+            self.queryset = self.queryset.filter(contestcategory__category__age__end__lte=request.GET['ageend']).distinct()
+        # if 'gendergroup' in request.GET:
+        #     self.queryset = self.queryset.filter(contestcategory__category__age__end__lte=request.GET['ageend']).distinct()
+        if 'datestart' in request.GET:
+            try:
+                start = datetime.datetime.strptime(request.GET['datestart'], '%d%m%Y').date()
+                self.queryset = self.queryset.filter(start__gte=start)
+            except:
+                return Response({'error': 'Формат даты начала периода задан неверно!'}, status=404)
+        if 'dateend' in request.GET:
+            try:
+                end = datetime.datetime.strptime(request.GET['dateend'], '%d%m%Y').date()
+                self.queryset = self.queryset.filter(end__lte=end)
+            except:
+                return Response({'error': 'Формат даты конца периода задан неверно!'}, status=404)
+        
+        ser = ContestSerializer(self.queryset, many=True)
         return Response(ser.data, status=200)
 
 

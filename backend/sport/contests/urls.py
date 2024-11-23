@@ -18,7 +18,7 @@ urlpatterns = [
     path('categories/<int:pk>', CategoryView.as_view({'get': 'retrieve'})),
     path('contests/', ContestView.as_view({'get': 'list'})),
     path('contests/<int:pk>', ContestView.as_view({'get': 'retrieve'})),
-    path('contests/filterbydate', ContestView.as_view({'get': 'get_filter_data'})),
+    path('contests/filter', ContestView.as_view({'get': 'get_filter_data'})),
     path('contestcategories/', ContestCategoryView.as_view({'get': 'list'})),
     path('contestcategories/<int:pk>', ContestCategoryView.as_view({'get': 'retrieve'})),
 ]
