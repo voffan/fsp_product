@@ -15,12 +15,18 @@ class DistrictSerializer(serializers.ModelSerializer):
 
 
 class RegionSerializer(serializers.ModelSerializer):
+    district = DistrictSerializer(read_only=True)
+    district_id = serializers.PrimaryKeyRelatedField(queryset=District.objects.all(), source="district", write_only=True)
+
     class Meta:
         model = Region
-        fields = ['district', 'name']
+        fields = ['district_id','district', 'name']
 
 
 class CitySerializer(serializers.ModelSerializer):
+    region = RegionSerializer(read_only=True)
+    region_id = serializers.PrimaryKeyRelatedField(queryset=Region.objects.all(), source="region", write_only=True)
+
     class Meta:
         model = City
-        fields = ['region', 'name']
+        fields = ['region_id', 'region', 'name']
