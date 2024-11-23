@@ -14,9 +14,9 @@ const ContestmentsFilter = () => {
         <Field
           value={mincontestant}
           onChange={(e) => {
+            console.log("sldfjks")
             handleFilterChange("mincontestant", e.target.value)
           }}
-          type="number"
           className="py-2 px-4 text-xs placeholder:text-xs"
           placeholder="1"
         />
@@ -29,7 +29,6 @@ const ContestmentsFilter = () => {
           onChange={(e) => {
             handleFilterChange("maxcontestant", e.target.value)
           }}
-          type="number"
           className="py-2 px-4 text-xs placeholder:text-xs"
           placeholder="1000"
         />

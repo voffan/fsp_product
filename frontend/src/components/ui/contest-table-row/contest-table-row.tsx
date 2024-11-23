@@ -1,12 +1,17 @@
 import { FC, useContext } from "react"
 import { IContestTableRowProps } from "./contest-table-row.interface"
 import { FiltersContext } from "../../../providers/filters-provider"
+import { SubscriptionContext } from "../../../providers/subscription-provider"
 
 const ContestTableRow: FC<IContestTableRowProps> = ({
   contest,
   isOdd = false,
 }) => {
   const { cities, countries, contesttypes } = useContext(FiltersContext)
+  const { subscriptions, subscribe, unsubscribe } =
+    useContext(SubscriptionContext)
+
+  const isSubscribed = subscriptions.find((item) => item.contest === contest.id)
 
   return (
     <tr className={isOdd ? "bg-whitespace" : "bg-white2"}>
@@ -28,15 +33,20 @@ const ContestTableRow: FC<IContestTableRowProps> = ({
       <td>
         {[
           countries.find((item) => item.id === contest.country)?.name,
-          cities.find((item) => item.id === contest.place)?.region.name,
-          cities.find((item) => item.id === contest.place)?.region.district
-            .name,
+          cities.find((item) => item.id === contest.place)?.region?.name,
+          cities.find((item) => item.id === contest.place)?.region?.district
+            ?.name,
           cities.find((item) => item.id === contest.place)?.name,
-        ].join(", ")}
+        ].join(" ")}
       </td>
       <td>{contest.contestants}</td>
-      <td onClick={() => {}} className="text-blue cursor-pointer">
-        {isOdd ? "Подписаться" : "Отписаться"}
+      <td
+        onClick={() => {
+          isSubscribed ? unsubscribe([contest.id]) : subscribe([contest.id])
+        }}
+        className="text-blue cursor-pointer"
+      >
+        {!isSubscribed ? "Подписаться" : "Отписаться"}
       </td>
     </tr>
   )

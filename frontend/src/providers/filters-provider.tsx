@@ -229,7 +229,7 @@ const FiltersProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const setCurPage = (value: string) => {
-    handleFilterChange("cur_page", value)
+    handleFilterChange("page", value)
   }
 
   if (isRegionsLoading) return <LoaderScreen />

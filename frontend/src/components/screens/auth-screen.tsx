@@ -161,8 +161,10 @@ const AuthScreen = () => {
 
           {/* Кнопка "войти" */}
           <div className="w-full flex flex-col ">
-            <Button className="text-xl">
-              {isLogin ? "Войти" : "Зарегистрироваться"}
+            <Button>
+              <div className="text-xl">
+                {isLogin ? "Войти" : "Зарегистрироваться"}
+              </div>
             </Button>
           </div>
         </div>

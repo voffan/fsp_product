@@ -17,7 +17,7 @@ const Pagination: FC<IPaginationProps> = ({ pagination }) => {
             onClick={() => {
               if (cur_page !== 1) setCurPage((Number(cur_page) - 1).toString())
             }}
-            className={(cur_page !== 1 ? "cursor-pointer" : "") + "rotate-90"}
+            className={(cur_page !== 1 ? "cursor-pointer " : "") + "rotate-90"}
           >
             <ArrowDownIcon color={cur_page !== 1 ? "black" : "gray"} />
           </div>
