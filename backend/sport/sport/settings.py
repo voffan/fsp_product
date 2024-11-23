@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'users',
     'country',
     'contests',
-    'subscription'
+    'subscription',
+    'notifications',
 ]
 
 REST_FRAMEWORK = {
