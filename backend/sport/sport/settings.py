@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'users',
-    'country'
+    'country',
+    'contests'
 ]
 
 REST_FRAMEWORK = {
