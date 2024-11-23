@@ -9,7 +9,8 @@ export default {
       colors: {
         lightgreen: "#618E87",
         gray: "#B4B4B4",
-        lightgray: "#F1F1F1",
+        gray2: "#E2E2E2",
+        lightgray: "#DDDDDD",
         whitespace: "#EDEDED",
         smoke: "#CBCBCB",
         blue: "#477BFF",
