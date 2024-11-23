@@ -23,7 +23,8 @@ class DisciplineView(ModelViewSet):
     serializer_class = DisciplineSerializer
 
     def get_disciplines_by_sport_type(self, request, sport_type_id=None):
-        disciplines = Discipline.objects.filter(sport_type_id=sport_type_id)
+        ids = request.GET.getlist('sporttype')
+        disciplines = Discipline.objects.filter(sport_type_id__in=ids)
         serializer = self.get_serializer(disciplines, many=True)
         return Response(serializer.data, status=200)
 
