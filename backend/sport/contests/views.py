@@ -58,19 +58,23 @@ class ContestView(ModelViewSet):
     serializer_class = ContestSerializer
 
     def get_filter_data(self, request):
-
+        
         if 'sporttype' in request.GET:
-            self.queryset = self.queryset.filter(contestdiscipline__discipline__sport_type__id=request.GET['sporttype']).distinct()
+            self.queryset = self.queryset.filter(contestdiscipline__discipline__sport_type__id__in=request.GET.getlist('sporttype')).distinct()
         if 'discipline' in request.GET:
-            self.queryset = self.queryset.filter(contestdiscipline__discipline__id=request.GET['discipline']).distinct()
+            self.queryset = self.queryset.filter(contestdiscipline__discipline__id__in=request.GET.getlist('discipline')).distinct()
         if 'contesttype' in request.GET:
-            self.queryset = self.queryset.filter(contest_type__id=request.GET['contesttype'])
+            self.queryset = self.queryset.filter(contest_type__id__in=request.GET.getlist('contesttype'))
         if 'agestart' in request.GET:
             self.queryset = self.queryset.filter(contestcategory__category__age__start__gte=request.GET['agestart']).distinct()
         if 'ageend' in request.GET:
             self.queryset = self.queryset.filter(contestcategory__category__age__end__lte=request.GET['ageend']).distinct()
         # if 'gendergroup' in request.GET:
         #     self.queryset = self.queryset.filter(contestcategory__category__age__end__lte=request.GET['ageend']).distinct()
+        if 'mincontestant' in request.GET:
+            self.queryset = self.queryset.filter(contestants__gte=request.GET['mincontestant'])
+        if 'maxcontestant' in request.GET:
+            self.queryset = self.queryset.filter(contestants__lte=request.GET['maxcontestant'])
         if 'datestart' in request.GET:
             try:
                 start = datetime.datetime.strptime(request.GET['datestart'], '%d%m%Y').date()
