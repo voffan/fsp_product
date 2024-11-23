@@ -1,5 +1,6 @@
 import datetime
 from django.shortcuts import render
+from django.core.paginator import Paginator
 from .models import SportType, Discipline, ContestType, AgeGroup, Contest
 from .serializers import SportTypeSerializer, DisciplineSerializer, ContestTypeSerializer, AgeGroupSerializer, ContestSerializer
 from rest_framework.viewsets import ModelViewSet
@@ -47,6 +48,26 @@ class ContestView(ModelViewSet):
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
 
+
+    def list(self, request, *args, **kwargs):
+        amount = 50
+        if 'per_page' in request.GET:
+            amount = int(request.GET['per_page'])
+
+        pages = Paginator(self.queryset, amount)
+
+        if 'page' in request.GET:
+            page = int(request.GET['page'])
+            if page > pages.num_pages:
+                page = pages.num_pages
+            if page < 1:
+                page = 1
+        
+        current_page = pages.page(page)
+
+        ser = self.get_serializer(current_page.object_list, many=True)
+        return Response({'data': ser.data, 'pages':{"total": pages.num_pages, "per_page": amount, 'cur_page': page}}, status=200)
+
     def get_filter_data(self, request):
         
         if 'sporttype' in request.GET:
@@ -82,5 +103,20 @@ class ContestView(ModelViewSet):
             except:
                 return Response({'error': 'Формат даты конца периода задан неверно!'}, status=404)
         
+        amount = 50
+        if 'per_page' in request.GET:
+            amount = int(request.GET['per_page'])
+
+        pages = Paginator(self.queryset, amount)
+
+        if 'page' in request.GET:
+            page = int(request.GET['page'])
+            if page > pages.num_pages:
+                page = pages.num_pages
+            if page < 1:
+                page = 1
+        
+        current_page = pages.page(page)
+        
         ser = ContestSerializer(self.queryset, many=True)
-        return Response(ser.data, status=200)
+        return Response({'data': ser.data, 'pages':{"total": pages.num_pages, "per_page": amount, 'cur_page': page}}, status=200)
