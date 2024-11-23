@@ -6,6 +6,7 @@ urlpatterns = [
     path('sporttypes/<int:pk>', SportTypeView.as_view({'get': 'retrieve'})),
     path('disciplines/', DisciplineView.as_view({'get': 'list'})),
     path('disciplines/<int:pk>', DisciplineView.as_view({'get': 'retrieve'})),
+    path('disciplines/by_sport_type/<int:sport_type_id>', DisciplineView.as_view({'get': 'get_disciplines_by_sport_type'})),
     path('contesttypes/', ContestTypeView.as_view({'get': 'list'})),
     path('contesttypes/<int:pk>', ContestTypeView.as_view({'get': 'retrieve'})),
     path('agegroups/', AgeGroupView.as_view({'get': 'list'})),

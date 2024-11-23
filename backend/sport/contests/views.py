@@ -3,6 +3,7 @@ from .models import SportType, Discipline, ContestType, AgeGroup, GenderGroup, C
 from .serializers import SportTypeSerializer, DisciplineSerializer, ContestTypeSerializer, AgeGroupSerializer, GenderGroupSerializer, CategorySerializer, ContestSerializer, ContestCategorySerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 
 # Create your views here.
@@ -18,6 +19,11 @@ class DisciplineView(ModelViewSet):
 
     queryset = Discipline.objects.all()
     serializer_class = DisciplineSerializer
+
+    def get_disciplines_by_sport_type(self, request, sport_type_id=None):
+        disciplines = Discipline.objects.filter(sport_type_id=sport_type_id)
+        serializer = self.get_serializer(disciplines, many=True)
+        return Response(serializer.data, status=200)
 
 class ContestTypeView(ModelViewSet):
     #permission_classes = [IsAuthenticated]
