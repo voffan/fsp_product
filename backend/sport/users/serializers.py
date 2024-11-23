@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import UserFilters
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,3 +21,8 @@ class UserSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+
+class UserFiltersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFilters
+        fields = ['id', 'user', 'sport_type', 'discipline', 'program', 'place', 'contestants_min', 'contestants_max', 'gender', 'age', 'start_date', 'end_date', 'contest_type']
