@@ -28,13 +28,11 @@ class UserProfile(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
-        serializer = UserSerializer(user)
+        serializer = UserSerializer(request.user)
         return Response(serializer.data, status=HTTP_200_OK)
 
     def post(self, request):
-        user = request.user
-        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=HTTP_200_OK)
@@ -54,9 +52,7 @@ class GetUserData(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        token_key = request.headers.get('Authorization', '').split()[-1]
-        token = Token.objects.get(key=token_key)
-        user = token.user
+        user = Token.objects.get(key=request.headers.get('Authorization', '').split()[-1]).user
         user_data = {
             'username': user.username,
             'email': user.email,
