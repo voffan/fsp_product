@@ -12,7 +12,7 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_400_BAD_RE
 # Create your views here.
 
 class UserViewSet(ModelViewSet):
-    #permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
