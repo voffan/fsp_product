@@ -13,7 +13,7 @@ const Checkbox: FC<ICheckboxProps> = ({
     <div className={`flex flex-${direction} gap-1 justify-start items-center`}>
       <input
         id={label}
-        onChange={(e) => {}}
+        onChange={() => {}}
         type="checkbox"
         checked={checked}
         className={`h-${size} w-${size}`}

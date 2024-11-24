@@ -1,4 +1,4 @@
-import { SubmitHandler, useForm, useWatch } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import { useUserStore } from "../../store/user.store"
 import { IUserChange } from "../../interfaces/user"
 import { useMutation } from "@tanstack/react-query"
@@ -10,7 +10,7 @@ import Field from "../ui/field/field"
 import Loader from "../ui/loader/loader"
 
 const ProfileScreen = () => {
-  const { check, isLoading, setUser } = useUserStore()
+  const { isLoading, setUser } = useUserStore()
   const user = useUserStore((state) => state.user)
 
   const {
@@ -18,7 +18,6 @@ const ProfileScreen = () => {
     formState: { errors, isDirty },
     handleSubmit,
     setValue,
-    control,
   } = useForm<IUserChange>({
     mode: "onChange",
     defaultValues: {
@@ -42,7 +41,7 @@ const ProfileScreen = () => {
     },
   })
 
-  const subscribe = useWatch({ control, name: "subscribe" })
+  // const subscribe = useWatch({ control, name: "subscribe" })
 
   const onSubmit: SubmitHandler<IUserChange> = async (data) => {
     if (data.second_name)
@@ -134,7 +133,7 @@ const ProfileScreen = () => {
                   <Field
                     disabled
                     value={user.username}
-                    onChange={(e) => {}}
+                    onChange={() => {}}
                     placeholder="Логин"
                   />
                   <Field

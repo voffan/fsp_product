@@ -66,8 +66,6 @@ const Filters = () => {
     handleClearFilter,
     dateend,
     datestart,
-    ageend,
-    agestart,
     male,
     female,
     mincontestant,

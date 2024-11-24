@@ -1,11 +1,7 @@
 import { instance } from "../../api/api.interceptor"
-import {
-  IGetAllGenderGroups,
-  IGetGenderGroup,
-} from "../../interfaces/gender-gorup"
 
 export const GenderGroupsService = {
-  async getAll(): Promise<IGetAllGenderGroups> {
+  async getAll() {
     const response = await instance({
       url: `/contestapi/gendergroups`,
       method: "GET",
@@ -14,7 +10,7 @@ export const GenderGroupsService = {
     return response
   },
 
-  async getById(id: string | number): Promise<IGetGenderGroup> {
+  async getById(id: string | number) {
     const response = await instance({
       url: `/contestapi/gendergroups/${id}`,
       method: "GET",

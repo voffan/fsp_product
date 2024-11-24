@@ -4,7 +4,7 @@ import { FiltersContext } from "../../../../providers/filters-provider"
 import Checkbox from "../../checkbox/checkbox"
 
 const GenderGroupFilter = () => {
-  const { toggleFilter, isActive, male, female } = useContext(FiltersContext)
+  const { toggleFilter, isActive, } = useContext(FiltersContext)
 
   return (
     <div className="flex flex-col gap-2">

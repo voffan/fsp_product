@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
 import { AgeGroupService } from "../../../../services/contest/age-group.service"
-import { useSearchParams } from "react-router"
 
 import Loader from "../../loader/loader"
 import Checkbox from "../../checkbox/checkbox"

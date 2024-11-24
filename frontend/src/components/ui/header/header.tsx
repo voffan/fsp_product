@@ -6,7 +6,7 @@ import Logo from "../logo/logo"
 import ProfileMenu from "../profile-menu/profile-menu"
 
 const Header = () => {
-  const { isProfileMenuOpen, setIsProfileMenuOpen } = useContext(ModalContext)
+  const { setIsProfileMenuOpen } = useContext(ModalContext)
 
   return (
     <header className="w-full px-8 h-16 flex flex-row justify-between items-center">
@@ -33,8 +33,7 @@ const Header = () => {
           className="h-14 w-14 bg-lightgreen rounded-full relative cursor-pointer"
         >
           <div className="relative">
-            <ProfileMenu
-            />
+            <ProfileMenu />
           </div>
         </div>
       </div>
