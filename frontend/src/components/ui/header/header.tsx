@@ -4,6 +4,7 @@ import { ModalContext } from "../../../providers/modal-provider"
 
 import Logo from "../logo/logo"
 import ProfileMenu from "../profile-menu/profile-menu"
+import UserIcon from "../icons/user.icon"
 
 const Header = () => {
   const { setIsProfileMenuOpen } = useContext(ModalContext)
@@ -27,10 +28,9 @@ const Header = () => {
         {/* Аватарка */}
         <div
           onClick={() => {
-            console.log("LMekeh")
             setIsProfileMenuOpen((prev) => !prev)
           }}
-          className="h-14 w-14 bg-lightgreen rounded-full relative cursor-pointer"
+          className="h-14 w-14 aspect-square bg-[url('/user.png')] bg-cover bg-center rounded-full relative cursor-pointer"
         >
           <div className="relative">
             <ProfileMenu />
