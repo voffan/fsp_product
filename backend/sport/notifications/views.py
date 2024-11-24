@@ -11,7 +11,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_404_NOT
 # Create your views here.
 class NotificationView(ModelViewSet):
     permission_classes = [IsAuthenticated]
-
+    serializer_class = NotificationSerializer
     queryset = Notification.objects.all()
 
     def get(self, request):
@@ -19,9 +19,6 @@ class NotificationView(ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
     
-class NotificationDelete(APIView):
-    permission_classes = [IsAuthenticated]
-
     def delete(self, request, notification_id):
         try:
             notification = Notification.objects.get(id=notification_id, user=request.user)
