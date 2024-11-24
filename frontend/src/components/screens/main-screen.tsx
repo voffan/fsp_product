@@ -10,7 +10,7 @@ const MainScreen = () => {
   const [searchParams] = useSearchParams()
 
   const { data, isLoading } = useQuery({
-    queryKey: ["contests"],
+    queryKey: ["contests", searchParams.toString()],
     queryFn: () => ContestService.getAll(searchParams.toString()),
   })
 

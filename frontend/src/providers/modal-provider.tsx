@@ -13,6 +13,7 @@ import { NotificationService } from "../services/notification/notification.servi
 
 import NotificationWindow from "../components/ui/notification/notification"
 import LoaderScreen from "../components/ui/loader/loader-screen"
+import { useUserStore } from "../store/user.store"
 
 interface IModalProvider {
   isChangeAvatarOpen: boolean
@@ -35,10 +36,11 @@ const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
 
   const { pathname } = useLocation()
+  const { isAuth } = useUserStore()
 
   const { data: notifications, isLoading: isNotificationsLoading } = useQuery({
     queryKey: ["notifications"],
-    queryFn: NotificationService.getAll,
+    queryFn: () => (isAuth ? NotificationService.getAll() : null),
   })
 
   useEffect(() => {
