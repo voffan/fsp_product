@@ -8,15 +8,16 @@ import Field from "../ui/field/field"
 import Loader from "../ui/loader/loader"
 
 const AuthScreen = () => {
-  const [isLogin, setIsLogin] = useState<boolean>(true)
   const [secondPassword, setSecondPassword] = useState<string>("")
 
-  const { login, register, isLoading } = useUserStore()
+  const { login, register, isLoading, isError, error, isLogin, setIsLogin } =
+    useUserStore()
 
   const {
     register: formRegister,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<IRegistartionDataWithSecondName>({ mode: "onChange" })
 
@@ -28,10 +29,11 @@ const AuthScreen = () => {
     if (isLogin) {
       await login(data)
     } else {
-      data.first_name = data.first_name + " " + data.second_name
+      if (data.second_name)
+        data.first_name = data.first_name + " " + data.second_name
       await register(data)
     }
-    console.log(data)
+    reset()
   }
 
   if (isLoading) return <Loader />
@@ -69,9 +71,7 @@ const AuthScreen = () => {
                   error={errors.last_name?.message}
                 />
                 <Field
-                  {...formRegister("second_name", {
-                    required: "Введите отчество",
-                  })}
+                  {...formRegister("second_name", {})}
                   label="Введите отчество (если есть)"
                   placeholder="Иванович"
                 />
@@ -135,6 +135,7 @@ const AuthScreen = () => {
                 error={password !== secondPassword ? "Пароли не совпадают" : ""}
               />
             )}
+            {isError && <div className="text-red-500">{error}</div>}
           </div>
 
           {/* Чекбокс "Запомнить меня" и ссылка на форму регистрации */}
@@ -148,7 +149,10 @@ const AuthScreen = () => {
             )}
 
             <div
-              onClick={() => setIsLogin((prev) => !prev)}
+              onClick={() => {
+                setIsLogin(!isLogin)
+                reset()
+              }}
               className="w-full flex flex-row justify-end cursor-pointer text-blue"
             >
               {isLogin ? "Регистрация" : "Авторизация"}

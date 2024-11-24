@@ -1,5 +1,7 @@
+import { IRegion } from "./region"
+
 export interface ICity {
   id: number
-  region: number
-  city: string
+  region: IRegion
+  name: string
 }

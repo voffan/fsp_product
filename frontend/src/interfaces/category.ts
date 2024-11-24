@@ -1,8 +1,14 @@
 import { IAgeGroup } from "./age-group"
-import { IGenderGroup } from "./gender-gorup"
 
 export interface ICategory {
-  id: number 
-  age: IAgeGroup 
-  gender: IGenderGroup
+  id: number
+  age: IAgeGroup
+}
+
+export interface IGetAllCategories {
+  data: ICategory[]
+}
+
+export interface IGetCategory {
+  data: ICategory
 }

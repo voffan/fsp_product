@@ -16,5 +16,5 @@ export const removeFromStorage = () => {
 }
 
 export const saveToStorage = (data: IAuthResponse) => {
-  saveTokenStorage(data.token)
+  setToken(data.token)
 }
