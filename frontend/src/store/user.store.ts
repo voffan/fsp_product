@@ -59,6 +59,7 @@ export const useUserStore = create<IUserStore>((set) => ({
 
     if (!isLogged) {
       removeFromStorage()
+
       set({
         isLoading: false,
         isAuth: false,
@@ -68,8 +69,6 @@ export const useUserStore = create<IUserStore>((set) => ({
       })
     } else {
       const user = await UserService.getProfile()
-
-      console.log("set user", user)
 
       set({
         isLoading: false,
