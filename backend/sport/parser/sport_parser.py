@@ -54,7 +54,7 @@ def parse_all_sheets(file_path):
 
     return all_sheets_data
 
-def save_structure_to_json(data, output_path="all_sheets_structure.json"):
+def save_structure_to_json(data, output_path="sport_data.json"):
     # Сохранение в JSON-файл
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
@@ -66,4 +66,4 @@ if __name__ == "__main__":
     # Сохраняем результат
     save_structure_to_json(structure)
     
-    print("Парсинг завершен. Данные сохранены в 'all_sheets_structure.json'.")
+    print("Парсинг завершен. Данные сохранены в 'sport_data.json'.")

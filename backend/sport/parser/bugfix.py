@@ -128,7 +128,7 @@ def extract_disciplines(text):
 def get_disciplines(text, code):
     
     parts = extract_disciplines(text)
-    print(parts)
+    print(f"Parts: {parts}")
     found_disciplines = []
 
     # Ищем вид спорта по коду в "Признанные" и "Общероссийские"
@@ -171,74 +171,70 @@ def main():
     IMPORT_FILENAME = "medium.pdf"
 
     # Загружаем PDF
-    pdf = load(f"{IMPORT_PATH}/{IMPORT_FILENAME}")
+    page = load(f"{IMPORT_PATH}/{IMPORT_FILENAME}").get_page(284)
     #print(f"Количество страниц: {pdf.number_of_pages}\n")
 
     rows = []
 
-    for page in pdf.pages:
-        #print(f"\nСтраница №: {page.page_number}\n")
-        page_elements = page.elements
-        current_event = None
-        for el in page_elements:
-            text = el.text().strip()
-            if not text:
-                continue
-            # Регулярные выражения для извлечения данных
+#for page in pdf.pages:
+    #print(f"\nСтраница №: {page.page_number}\n")
+    page_elements = page.elements
+    for el in page_elements:
+        text = el.text().strip()
+        print(f"El: {text}\n")
+        if not text:
+            continue
 
-            match1 = re.match(r"^([0-9]{16}) (.+)", text)
-            if match1:
-                code = match1.group(1)
-                sport_code = int(code[1:4])
-                program = match1.group(2)
-                current_event = {"code": code, "program": program, "sport_code": sport_code}
-                current_event["arr"] = []
-                current_event["arr"].append(text)
-                rows.append(current_event)
+        # Регулярные выражения для извлечения данных
+        match1 = re.match(r"^([0-9]{16}) ([\w+|\S+\ ?]*)$", text)
+        if match1:
+            code = match1.group(1)
+            sport_code = int(code[1:4])
+            program = match1.group(2)
+            current_event = {"code": code, "program": program, "sport_code": sport_code}
+            rows.append(current_event)
+            continue
 
-            if current_event:
-                current_event["arr"].append(text)
+        match2 = re.match(r"^[0-9]{0,15}$", text)
+        if match2:
+            contestants = match2.group(0)
+            current_event["contestants"] = contestants
+            continue
 
-            match2 = re.match(r"^[0-9]{0,15}$", text)
-            if match2 and current_event:
-                contestants = match2.group(0)
-                current_event["contestants"] = contestants
-                continue
+        match3 = re.match(r"(\d{2}\.\d{2}\.\d{4})\s+(\d{2}\.\d{2}\.\d{4})", text)
+        if match3:
+            start = match3.group(1)
+            end = match3.group(2)
+            current_event["start"] = start
+            current_event["end"] = end
+            continue
 
-            match3 = re.match(r"(\d{2}\.\d{2}\.\d{4})\s+(\d{2}\.\d{2}\.\d{4})", text)
-            if match3 and current_event:
-                start = match3.group(1)
-                end = match3.group(2)
-                current_event["start"] = start
-                current_event["end"] = end
-                continue
+        match4 = re.match(r"([\w]+)\n([\w+|\S+\ ?]*), ?([\w+|\S+\ ?]*)", text)
+        if match4:
+            country = match4.group(1)
+            region = match4.group(2)
+            city = match4.group(3)
+            current_event["country"] = country
+            current_event["region"] = region
+            current_event["city"] = city
+            continue
 
-            match4 = re.match(r"(?P<country>[\w]+)\n(?P<region>[\w+|\S+\ ?]*,+)?(?P<city>[\w+|\S+\ ?]*)", text)
-            if match4 and current_event:
-                country = match4.group("country")
-                region = match4.group("region")
-                city = match4.group("city")
-                current_event["country"] = country or None
-                current_event["region"] = region or None
-                current_event["city"] = city or None
-                continue
-
-            match5 = re.search(r"(мальчики|девочки|юноши|девушки|юниоры|юниорки|женщины|мужчины)", text)
-            if match5 and current_event:
-                description = re.sub(r"^[0-9]{16} .+\n", "", text)
-                current_event["description"] = description
-                gender_group = gender_groups(description)
-                current_event["gender_group"] = gender_group
-                disciplines = get_disciplines(description, current_event['sport_code'])
-                sport_type = get_sport_type(current_event['sport_code'])
-                current_event["sport_type"] = sport_type
-                current_event["disciplines"] = disciplines
+        match5 = re.search(r"(мальчики|девочки|юноши|девушки|юниоры|юниорки|женщины|мужчины)", text)
+        if match5:
+            description = text
+            current_event["description"] = description
+            gender_group = gender_groups(text)
+            current_event["gender_group"] = gender_group
+            disciplines = get_disciplines(text, current_event['sport_code'])
+            sport_type = get_sport_type(current_event['sport_code'])
+            current_event["sport_type"] = sport_type
+            current_event["disciplines"] = disciplines
 
     # Сохраняем результат в JSON
-    with open("parsed_data.json", "w", encoding="utf-8") as f:
+    with open("bugfix.json", "w", encoding="utf-8") as f:
         json.dump(rows, f, ensure_ascii=False, indent=4)
 
-    print("Данные успешно сохранены в файл parsed_data.json")
+    print("Данные успешно сохранены в файл bugfix.json")
 
 
 # Запуск скрипта
