@@ -1,14 +1,12 @@
-import { useState } from "react"
-import { useUserStore } from "../../../store/user.store"
+import { useContext } from "react"
+import { Link } from "react-router"
+import { ModalContext } from "../../../providers/modal-provider"
 
 import Logo from "../logo/logo"
-import cn from "clsx"
-import { Link } from "react-router"
+import ProfileMenu from "../profile-menu/profile-menu"
 
 const Header = () => {
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
-
-  const { logout } = useUserStore()
+  const { isProfileMenuOpen, setIsProfileMenuOpen } = useContext(ModalContext)
 
   return (
     <header className="w-full px-8 h-16 flex flex-row justify-between items-center">
@@ -28,28 +26,15 @@ const Header = () => {
 
         {/* Аватарка */}
         <div
-          onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+          onClick={() => {
+            console.log("LMekeh")
+            setIsProfileMenuOpen((prev) => !prev)
+          }}
           className="h-14 w-14 bg-lightgreen rounded-full relative cursor-pointer"
         >
-          <div
-            className={cn(
-              isProfileMenuOpen ? "flex" : "hidden",
-              "absolute flex-col top-[64px] right-0 rounded-xl overflow-hidden bg-white shadow-lg",
-              "transition-all delay-200"
-            )}
-          >
-            <Link
-              to="/profile"
-              className="p-2 cursor-pointer whitespace-nowrap hover:bg-gray"
-            >
-              Мой профиль
-            </Link>
-            <div
-              onClick={() => logout()}
-              className="p-2 cursor-pointer hover:bg-gray"
-            >
-              Выйти
-            </div>
+          <div className="relative">
+            <ProfileMenu
+            />
           </div>
         </div>
       </div>

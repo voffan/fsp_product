@@ -1,16 +1,20 @@
-import { ICity } from "./city"
+import { IPagination } from "./pagination"
 
 export interface IContest {
   id: number
   program: string
   code: string
-  start: Date
-  end: Date
-  place: ICity
+  male: boolean
+  female: boolean
+  start: string
+  end: string
+  place: number
+  country: number
   contestants: number
+  contest_type: number
 }
 
-export interface ContestType {
-  id: number
-  name: string
+export interface IGetAllContests {
+  data: IContest[]
+  pages: IPagination
 }
